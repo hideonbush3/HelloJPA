@@ -43,7 +43,9 @@ public class Employees {
     private Integer mgrid;
 
     @Column(name = "DEPARTMENT_ID")
-    @JoinColumn(name = "departments_id")
     private Long deptid;
 
+    @ManyToOne
+    @JoinColumn(name="DEPARTMRNT_ID")
+    private Departments dept;
 }
