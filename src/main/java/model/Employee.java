@@ -1,9 +1,6 @@
 package model;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -51,9 +48,9 @@ public class Employee {
     private Long deptid;
 
     // 조인대상 객체를 쓴다
-//    @ManyToOne  // 테이블 연관관계 다대일
-//    @JoinColumn(name="department_id")   // 실제 컬럼명이 아니고 department 테이블의 id와 조인
-//    private Department department;
+    @ManyToOne  // 테이블 연관관계 다대일
+    @JoinColumn(name="department_id")   // 실제 컬럼명이 아니고 department 테이블의 id와 조인
+    private Department department;
 
     @Override
     public String toString() {
