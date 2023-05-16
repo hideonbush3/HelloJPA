@@ -3,6 +3,7 @@ package jpa;
 import model.Employee;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HelloJPA03 {
@@ -35,8 +36,8 @@ public class HelloJPA03 {
             jpql = "select e from Employee e where jobid = :jobid"; // 이름기반
             //jpql = "select e from Employees e where jobid = ?1";   // 위치기반
 
-            TypedQuery<Employee> query = em.createQuery(jpql, Employee.class);
-            query.setParameter("jobid", "IT_PROG");
+//            TypedQuery<Employee> query = em.createQuery(jpql, Employee.class);
+//            query.setParameter("jobid", "IT_PROG");
             //query.setParameter(1, "IT_PROG");
 
             //emps = query.getResultList();
@@ -77,10 +78,50 @@ public class HelloJPA03 {
             // 사원이름, 직책, 부서명 조회 : join
             jpql = "select e.fname, e.jobid, e.deptid, d.dname from Employee e " +
                    " inner join e.department d";
-            List<Object[]> items = em.createQuery(jpql).getResultList();
+//            List<Object[]> items = em.createQuery(jpql).getResultList();
+//
+//            for (Object[] item : items)
+//                System.out.println(item[0] + "/" + item[1] + "/" + item[2] + " / " + item[3]);
 
-            for (Object[] item : items)
-                System.out.println(item[0] + "/" + item[1] + "/" + item[2] + " / " + item[3]);
+            // 부서번호가 60번인 사원들의 이름, 직책, 부서명 조회 : join
+            jpql = "select e.fname, e.jobid, d.dname from Employee e join" +
+                    " e.department d where e.deptid = 60";
+//            items = em.createQuery(jpql).getResultList();
+//
+//            for(Object[] item : items) System.out.println(item[0] + " / " + item[1] + " / " + item[2]);
+
+            // 부서명이 IT인 사원의 사번과 입사일 조회 : 서브쿼리
+            jpql = "select e.empid, e.hdate from Employee e where deptid =  " +
+            "(select d.deptid from Department d where dname = 'IT')";
+
+//            List<Object[]> items = em.createQuery(jpql).getResultList();
+//
+//            for(Object[] item : items) System.out.println(item[0] + " / "  + item[1]);
+
+            // 이름, 직책, 연봉이 주어졌을때 사원의 모든 정보 조회 - 동적쿼리
+            String fname = "";
+            String jobid = "";
+            Integer sal = 0;    // null 체크를 위해 기본형이 아닌 클래스형으로 선언
+
+            jpql = "select e from Employee e";
+            List<String> cndtns = new ArrayList<>(); // 조건절 저장할 배열
+
+            if(fname != null)    cndtns.add("fname like concat('%', :fname, '%') ");
+            if(jobid != null)    cndtns.add(" jobid = :jobid ");
+            if(sal != null)      cndtns.add(" sal >= :sal ");
+
+            // 조건식이 하나라도 존재한다면
+            if(!cndtns.isEmpty()) jpql += " where " + String.join(" and ", cndtns);
+
+            TypedQuery<Employee> query = em.createQuery(jpql, Employee.class);
+
+            if(fname != null)    query.setParameter("fname", fname);
+            if(jobid != null)    query.setParameter("jobid", jobid);
+            if(sal != null)      query.setParameter("sal", sal);
+
+            List<Employee> emps = query.getResultList();
+
+            for(Employee emp : emps) System.out.println(emp);
 
         } catch (Exception ex) {
             ex.printStackTrace();
