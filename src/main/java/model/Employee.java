@@ -9,7 +9,7 @@ import java.sql.Date;
 @Data
 @Entity
 @Table(name = "employees")
-public class Employees {
+public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EMPLOYEE_ID")
@@ -45,7 +45,8 @@ public class Employees {
     @Column(name = "DEPARTMENT_ID")
     private Long deptid;
 
-    @ManyToOne
-    @JoinColumn(name="DEPARTMRNT_ID")
-    private Departments dept;
+    // 조인대상 객체를 쓴다
+    @ManyToOne  // 테이블 연관관계 다대일
+    @JoinColumn(name="department_id")   // 실제 컬럼명이 아니고 department 테이블의 id와 조인
+    private Department department;
 }

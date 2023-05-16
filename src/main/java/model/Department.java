@@ -3,12 +3,11 @@ package model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @Entity
 @Table(name = "departments")
-public class Departments {
+public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +22,4 @@ public class Departments {
 
     @Column(nullable = false, name = "LOCATION_ID")
     private Integer locid;
-
-    @OneToMany(mappedBy = "dept")
-    private List<Employees> employees;
 }
