@@ -99,14 +99,17 @@ public class HelloJPA03 {
 //            for(Object[] item : items) System.out.println(item[0] + " / "  + item[1]);
 
             // 이름, 직책, 연봉이 주어졌을때 사원의 모든 정보 조회 - 동적쿼리
-            String fname = "";
-            String jobid = "";
-            Integer sal = 0;    // null 체크를 위해 기본형이 아닌 클래스형으로 선언
+            // 직책이 IT_PROG 인 사원 조회
+            // 연봉이 10000이상인 사원 조회
+            // 직책이 IT_PROG이고 연봉이 6000 이상인 사원 조회
+            String fname = null;
+            String jobid = "IT_PROG";
+            Integer sal = 6000;    // null 체크를 위해 기본형이 아닌 클래스형으로 선언
 
             jpql = "select e from Employee e";
             List<String> cndtns = new ArrayList<>(); // 조건절 저장할 배열
 
-            if(fname != null)    cndtns.add("fname like concat('%', :fname, '%') ");
+            if(fname != null)    cndtns.add(" fname like concat('%', :fname, '%') ");
             if(jobid != null)    cndtns.add(" jobid = :jobid ");
             if(sal != null)      cndtns.add(" sal >= :sal ");
 
